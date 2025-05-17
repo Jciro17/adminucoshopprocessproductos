@@ -1,8 +1,22 @@
 package com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.campaign;
 
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.category.CategoryDomain;
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.payment_management.BankDomain;
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.product_management.ProductDomain;
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.user.RolDomain;
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.user.TypeOfDocumentDomain;
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.user.UserDomain;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Entity
+@Getter
+@Setter
+@Table(name = "campaings")
 public class Campaingns {
     @Id
     @Column(name = "id", nullable = false)
