@@ -1,4 +1,4 @@
-package com.adminucoshopprocessproductos.adminucoshopprocessproductos.messenger.campaign;
+package com.adminucoshopprocessproductos.adminucoshopprocessproductos.messaging.campaign;
 
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.crosscutting.utils.gson.MapperJsonObject;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.campaign.Campaingns;
