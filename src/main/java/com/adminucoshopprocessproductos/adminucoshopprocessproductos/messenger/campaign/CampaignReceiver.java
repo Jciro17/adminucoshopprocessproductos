@@ -31,6 +31,6 @@ public class CampaignReceiver {
     }
 
     private Optional<Campaingns> obtenerObjetoDeMensaje(String mensaje) {
-        return mapperJsonObject.ejecutar(mensaje, Campaingns.class);
+        return mapperJsonObject.execute(mensaje, Campaingns.class);
     }
 }
