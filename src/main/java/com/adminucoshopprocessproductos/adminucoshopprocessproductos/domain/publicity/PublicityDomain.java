@@ -1,5 +1,6 @@
 package com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.publicity;
 
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.campaign.Campaingns;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.product_management.ProductDomain;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
