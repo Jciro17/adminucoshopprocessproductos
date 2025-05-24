@@ -4,10 +4,9 @@ import java.util.Optional;
 
 public interface MapperJsonObject {
 
-    Optional<String> execute(Object object);
+    Optional<String> ejecutar(Object objeto);
 
-    <T> Optional<T> execute(Object object, Class<T> DestinationClass);
+    <T> Optional<T> ejecutar(String json, Class<T> claseDestino);
 
-    Optional<String> gsonExecute(Object object);
-
+    Optional<String> ejecutarGson(Object objecto);
 }

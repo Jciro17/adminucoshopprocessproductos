@@ -1,35 +1,35 @@
 package com.adminucoshopprocessproductos.adminucoshopprocessproductos.service.campaign;
 
-import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.campaign.Campaingns;
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.campaign.CampaignsRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.campaign.Campaigns;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.category.CategoryDomain;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.payment_management.BankDomain;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.product_management.ProductDomain;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.user.RolDomain;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.user.TypeOfDocumentDomain;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.user.UserDomain;
-import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.campaign.CampaingnsRepository;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.campaign.RolRepository;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.campaign.TypeDocumentRepository;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.category.CategoryRepository;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.payment_management.BankRepository;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.product_management.ProductRepository;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.userRegister.UserRegisterRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
 @Transactional
-public class CampaingnsService {
+public class CampaignsService {
 
-    private final CampaingnsRepository campaingnsRepository;
+    private final CampaignsRepository campaignsRepository;
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final UserRegisterRepository userRepository;
@@ -38,14 +38,14 @@ public class CampaingnsService {
     private final RolRepository roleRepository;
 
     @Autowired
-    public CampaingnsService(CampaingnsRepository campaingnsRepository,
-                             ProductRepository productRepository,
-                             CategoryRepository categoryRepository,
-                             UserRegisterRepository userRepository,
-                             ObjectMapper objectMapper, BankRepository bankRepository,
-                             TypeDocumentRepository documentTypeRepository,
-                             RolRepository roleRepository) {
-        this.campaingnsRepository = campaingnsRepository;
+    public CampaignsService(CampaignsRepository campaignsRepository,
+                            ProductRepository productRepository,
+                            CategoryRepository categoryRepository,
+                            UserRegisterRepository userRepository,
+                            ObjectMapper objectMapper, BankRepository bankRepository,
+                            TypeDocumentRepository documentTypeRepository,
+                            RolRepository roleRepository) {
+        this.campaignsRepository = campaignsRepository;
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
@@ -56,28 +56,28 @@ public class CampaingnsService {
 
 
 
-    public List<Campaingns> findAll() {
-        return campaingnsRepository.findAll();
+    public List<Campaigns> findAll() {
+        return campaignsRepository.findAll();
     }
 
-    public ResponseEntity<Campaingns> findById(UUID campaignId) {
+    public ResponseEntity<Campaigns> findById(UUID campaignId) {
         if (campaignId == null) {
             throw new RuntimeException("EL Id de la campaña no puede ser nulo");
         }
-        if (!campaingnsRepository.existsById(campaignId)) {
+        if (!campaignsRepository.existsById(campaignId)) {
             throw new EntityNotFoundException("La campaña no existe no existe");
         }
 
-        Campaingns campaingns = campaingnsRepository.findById(campaignId).orElse(null);
+        Campaigns campaingns = campaignsRepository.findById(campaignId).orElse(null);
         return new ResponseEntity<>(campaingns, HttpStatus.OK);
     }
 
-    public ResponseEntity<String> saveCampaign(Campaingns campaign) {
+    public ResponseEntity<String> saveCampaign(Campaigns campaign) {
         if (campaign == null) {
             return ResponseEntity.badRequest().body("La campaña no puede ser nula");
         }
 
-        if (campaign.getId() != null && campaingnsRepository.existsById(campaign.getId())) {
+        if (campaign.getId() != null && campaignsRepository.existsById(campaign.getId())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("El Id de la campaña ya existe");
         }
 
@@ -170,62 +170,120 @@ public class CampaingnsService {
         campaign.setRole(role);
         campaign.setUser(user);
 
-        campaingnsRepository.save(campaign);
+        campaignsRepository.save(campaign);
         return ResponseEntity.ok("Campaña registrada exitosamente");
     }
 
 
 
     public ResponseEntity<String> deleteCampaign(UUID id) {
-        if (id == null || !campaingnsRepository.existsById(id)) {
+        if (id == null || !campaignsRepository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La campaña no existe");
         }
-        campaingnsRepository.deleteById(id);
+        campaignsRepository.deleteById(id);
         return ResponseEntity.ok("Campaña eliminada exitosamente");
     }
 
-    public ResponseEntity<String> updateCampaign(UUID id, Campaingns updatedCampaign) {
+    public ResponseEntity<String> updateCampaign(UUID id, Campaigns updatedCampaign) {
         if (id == null || updatedCampaign == null) {
             return ResponseEntity.badRequest().body("Datos inválidos para actualizar campaña");
         }
 
-        Campaingns existingCampaign = campaingnsRepository.findById(id).orElse(null);
+        Campaigns existingCampaign = campaignsRepository.findById(id).orElse(null);
         if (existingCampaign == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La campaña no existe");
         }
 
-        // Actualización de relaciones (si no vienen como null)
-        if (updatedCampaign.getProduct() != null) {
+        // Validar usuario
+        if (updatedCampaign.getUser() == null || updatedCampaign.getUser().getUserId() == null) {
+            return ResponseEntity.badRequest().body("El usuario es obligatorio");
+        }
+        UUID userId = updatedCampaign.getUser().getUserId();
+        if (!userRepository.existsById(userId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario no existe");
+        }
+        UserDomain user = userRepository.findById(userId).orElseThrow();
+
+        // Validar fechas
+        if (updatedCampaign.getStartDate() == null || updatedCampaign.getEndDate() == null) {
+            return ResponseEntity.badRequest().body("Las fechas de inicio y fin son obligatorias");
+        }
+        if (!updatedCampaign.getEndDate().isAfter(updatedCampaign.getStartDate())) {
+            return ResponseEntity.badRequest().body("La fecha de fin debe ser mayor a la fecha de inicio");
+        }
+
+        // Validar al menos uno de los campos opcionales
+        boolean hasValidField = (updatedCampaign.getProduct() != null && updatedCampaign.getProduct().getProductId() != null) ||
+                (updatedCampaign.getCategory() != null && updatedCampaign.getCategory().getCategoryId() != null) ||
+                (updatedCampaign.getZone() != null && !updatedCampaign.getZone().isBlank()) ||
+                (updatedCampaign.getBank() != null && updatedCampaign.getBank().getIdBank() != null) ||
+                (updatedCampaign.getDocumentType() != null && updatedCampaign.getDocumentType().getTypeOfDocumentId() > 0) ||
+                (updatedCampaign.getRole() != null && updatedCampaign.getRole().getRolId() > 0);
+
+        if (!hasValidField) {
+            return ResponseEntity.badRequest().body("Debe existir al menos un campo válido: producto, categoría, zona, banco, tipo de documento o rol");
+        }
+
+        // Validar y asignar campos relacionados
+        if (updatedCampaign.getProduct() != null && updatedCampaign.getProduct().getProductId() != null) {
             UUID productId = updatedCampaign.getProduct().getProductId();
-            existingCampaign.setProduct(productRepository.findById(productId).orElse(null));
+            if (!productRepository.existsById(productId)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El producto no existe");
+            }
+            existingCampaign.setProduct(productRepository.findById(productId).orElseThrow());
         }
 
-        if (updatedCampaign.getCategory() != null) {
+        if (updatedCampaign.getCategory() != null && updatedCampaign.getCategory().getCategoryId() != null) {
             UUID categoryId = updatedCampaign.getCategory().getCategoryId();
-            existingCampaign.setCategory(categoryRepository.findById(categoryId).orElse(null));
+            if (!categoryRepository.existsById(categoryId)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La categoría no existe");
+            }
+            existingCampaign.setCategory(categoryRepository.findById(categoryId).orElseThrow());
         }
 
-        if (updatedCampaign.getUser() != null) {
-            UUID userId = updatedCampaign.getUser().getUserId();
-            existingCampaign.setUser(userRepository.findById(userId).orElse(null));
+        if (updatedCampaign.getBank() != null && updatedCampaign.getBank().getIdBank() != null) {
+            UUID bankId = updatedCampaign.getBank().getIdBank();
+            if (!bankRepository.existsById(bankId)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El banco no existe");
+            }
+            existingCampaign.setBank(bankRepository.findById(bankId).orElseThrow());
         }
 
-        // Datos simples
+        if (updatedCampaign.getDocumentType() != null && updatedCampaign.getDocumentType().getTypeOfDocumentId() > 0) {
+            int docTypeId = updatedCampaign.getDocumentType().getTypeOfDocumentId();
+            Optional<TypeOfDocumentDomain> documentType = documentTypeRepository.findAll().stream()
+                    .filter(d -> d.getTypeOfDocumentId() == docTypeId)
+                    .findFirst();
+            if (documentType.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El tipo de documento no existe");
+            }
+            existingCampaign.setDocumentType(documentType.get());
+        }
+
+        if (updatedCampaign.getRole() != null && updatedCampaign.getRole().getRolId() > 0) {
+            int roleId = updatedCampaign.getRole().getRolId();
+            Optional<RolDomain> role = roleRepository.findAll().stream()
+                    .filter(r -> r.getRolId() == roleId)
+                    .findFirst();
+            if (role.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El rol especificado no existe");
+            }
+            existingCampaign.setRole(role.get());
+        }
+
+        // Asignar datos simples
+        existingCampaign.setUser(user);
         existingCampaign.setZone(updatedCampaign.getZone());
-        existingCampaign.setRole(updatedCampaign.getRole());
-        existingCampaign.setDocumentType(updatedCampaign.getDocumentType());
-        existingCampaign.setBank(updatedCampaign.getBank());
         existingCampaign.setStartDate(updatedCampaign.getStartDate());
         existingCampaign.setEndDate(updatedCampaign.getEndDate());
         existingCampaign.setRegistrationDate(updatedCampaign.getRegistrationDate());
 
-        // Cálculo automático de duración si ambas fechas están presentes
-        if (updatedCampaign.getStartDate() != null && updatedCampaign.getEndDate() != null) {
-            long daysBetween = ChronoUnit.DAYS.between(updatedCampaign.getStartDate(), updatedCampaign.getEndDate());
-            existingCampaign.setDuration(String.valueOf((int) daysBetween));
-        }
+        // Calcular duración
+        long duration = ChronoUnit.DAYS.between(updatedCampaign.getStartDate(), updatedCampaign.getEndDate());
+        existingCampaign.setDuration(String.valueOf(duration));
 
-        campaingnsRepository.save(existingCampaign);
+        // Guardar cambios
+        campaignsRepository.save(existingCampaign);
         return ResponseEntity.ok("Campaña actualizada exitosamente");
     }
 
