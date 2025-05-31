@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Component
 public class CampaignReceiver {
-
+/*
     @Autowired
     private CampaingnsService campaingnsService;
 
@@ -31,6 +31,8 @@ public class CampaignReceiver {
     }
 
     private Optional<Campaingns> obtenerObjetoDeMensaje(String mensaje) {
-        return mapperJsonObject.execute(mensaje, Campaingns.class);
+        return mapperJsonObject.ejecutar(mensaje, Campaingns.class);
     }
+
+ */
 }
