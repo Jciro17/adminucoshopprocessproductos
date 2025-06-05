@@ -145,7 +145,7 @@ public class CampaignsService {
         TypeOfDocumentDomain documentType = null;
         if (campaign.getDocumentType() != null && campaign.getDocumentType().getTypeOfDocumentId() > 0) {
             if (!documentTypeRepository.findAll().stream()
-                    .noneMatch(d -> d.getTypeOfDocumentId() == campaign.getDocumentType().getTypeOfDocumentId())) {
+                    .anyMatch((d -> d.getTypeOfDocumentId() == campaign.getDocumentType().getTypeOfDocumentId()))) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El tipo de documento no existe");
             }
             documentType = campaign.getDocumentType();

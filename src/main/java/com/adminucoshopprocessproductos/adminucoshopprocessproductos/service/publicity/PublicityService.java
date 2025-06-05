@@ -1,10 +1,10 @@
 package com.adminucoshopprocessproductos.adminucoshopprocessproductos.service.publicity;
 
 
-import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.campaign.Campaingns;
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.campaign.Campaigns;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.product_management.ProductDomain;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.publicity.PublicityDomain;
-import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.campaign.CampaingnsRepository;
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.campaign.CampaignsRepository;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.product_management.ProductRepository;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.repository.publicity.PublicityRepository;
 import org.springframework.http.HttpStatus;
@@ -20,12 +20,12 @@ import java.util.UUID;
 public class PublicityService {
 
     private final PublicityRepository publicityRepository;
-    private final CampaingnsRepository campaignRepository;
+    private final CampaignsRepository campaignRepository;
     private final ProductRepository productRepository;
 
     public PublicityService(
             PublicityRepository publicityRepository,
-            CampaingnsRepository campaignRepository,
+            CampaignsRepository campaignRepository,
             ProductRepository productRepository
     ) {
         this.publicityRepository = publicityRepository;
@@ -51,7 +51,7 @@ public class PublicityService {
         UUID campaignId = publicity.getCampaign().getId();
         UUID productId = publicity.getProduct().getProductId();
 
-        Optional<Campaingns> campaignOpt = campaignRepository.findById(campaignId);
+        Optional<Campaigns> campaignOpt = campaignRepository.findById(campaignId);
         Optional<ProductDomain> productOpt = productRepository.findById(productId);
 
         if (campaignOpt.isEmpty()) {
@@ -62,7 +62,7 @@ public class PublicityService {
             throw new NoSuchElementException("El producto asociado no existe");
         }
 
-        Campaingns campaign = campaignOpt.get();
+        Campaigns campaign = campaignOpt.get();
 
         if (!publicity.getStartDate().isEqual(campaign.getStartDate()) ||
                 !publicity.getEndDate().isEqual(campaign.getEndDate())) {
@@ -88,7 +88,7 @@ public class PublicityService {
         UUID campaignId = updated.getCampaign().getId();
         UUID productId = updated.getProduct().getProductId();
 
-        Optional<Campaingns> campaignOpt = campaignRepository.findById(campaignId);
+        Optional<Campaigns> campaignOpt = campaignRepository.findById(campaignId);
         Optional<ProductDomain> productOpt = productRepository.findById(productId);
 
         if (campaignOpt.isEmpty()) {
@@ -99,7 +99,7 @@ public class PublicityService {
             throw new NoSuchElementException("El producto asociado no existe");
         }
 
-        Campaingns campaign = campaignOpt.get();
+        Campaigns campaign = campaignOpt.get();
 
         if (!updated.getStartDate().isEqual(campaign.getStartDate()) ||
                 !updated.getEndDate().isEqual(campaign.getEndDate())) {

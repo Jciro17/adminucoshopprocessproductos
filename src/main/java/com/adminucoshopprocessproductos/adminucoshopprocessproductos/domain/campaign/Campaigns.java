@@ -16,7 +16,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@Table(name = "campaigs")
+@Table(name = "campaigns")
 public class Campaigns {
     @Id
     @Column(name = "id", nullable = false)

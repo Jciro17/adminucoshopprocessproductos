@@ -14,7 +14,6 @@ import java.util.Optional;
 @Component
 public class CampaignConsumer {
 
-
     private final CampaignsService campaignsService;
     private final MapperJsonObjectJackson mapper;
 
@@ -30,7 +29,6 @@ public class CampaignConsumer {
             if (campaignsOpt.isPresent()) {
                 Campaigns campaigns = campaignsOpt.get();
                 campaignsService.saveCampaign(campaigns);
-                log.info("Save " + campaigns);
                 return "OK";
             } else {
                 String error = "Nose pudó deserializar el mensaje a Campaigns";
@@ -44,7 +42,26 @@ public class CampaignConsumer {
         }
     }
 
-    /*
+    @RabbitListener(queues = {"apiproducts.process.update.campaign.qu"})
+    public String updateCampaign(String messageBody) {
+        try {
+            Optional<Campaigns> campaignsOpt = mapper.ejecutar(messageBody, Campaigns.class);
+            if (campaignsOpt.isPresent()) {
+                Campaigns campaigns = campaignsOpt.get();
+                campaignsService.updateCampaign(campaigns.getId(), campaigns);
+                return "OK";
+            } else {
+                String error = "No se pudó deserializar el mensaje a Campaigns";
+                log.error(error);
+                return error;
+            }
+        } catch (Exception ex) {
+            String error = "Error al actualizar la campaña: " + ex.getMessage();
+            log.error(error, ex);
+            return error;
+        }
+    }
+
     @RabbitListener(queues = {"apiproducts.process.delete.campaign.qu"})
     public String deleteCampaign(String messageBody) {
         try {
@@ -52,7 +69,6 @@ public class CampaignConsumer {
             if (campaignsOpt.isPresent()) {
                 Campaigns campaigns = campaignsOpt.get();
                 campaignsService.deleteCampaign(campaigns.getId());
-                log.info("Delete " + campaigns);
                 return "OK";
             } else {
                 String error = "No se pudó deserializar el mensaje a Campaigns";
@@ -61,9 +77,8 @@ public class CampaignConsumer {
             }
         } catch (Exception ex) {
             String error = "Error al eliminar la campaña " + ex.getMessage();
-            log.error(error);
+            log.error(error, ex);
             return error;
         }
     }
-    */
 }
