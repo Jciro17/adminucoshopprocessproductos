@@ -1,6 +1,6 @@
 package com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.publicity;
 
-import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.campaign.Campaingns;
+import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.campaign.Campaigns;
 import com.adminucoshopprocessproductos.adminucoshopprocessproductos.domain.product_management.ProductDomain;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +31,7 @@ public class PublicityDomain {
 
     @ManyToOne
     @JoinColumn(name = "campaignId")
-    private Campaingns campaign;
+    private Campaigns campaign;
 
     @Column(name = "role")
     private String role;

@@ -16,8 +16,8 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@Table(name = "campaings")
-public class Campaingns {
+@Table(name = "campaigns")
+public class Campaigns {
     @Id
     @Column(name = "id", nullable = false)
     private UUID id;
@@ -61,10 +61,10 @@ public class Campaingns {
     @Column(name = "duration")
     private String duration;
 
-    public Campaingns() {
+    public Campaigns() {
     }
 
-    public Campaingns(UUID id, ProductDomain product, UserDomain user, CategoryDomain category, String zone, RolDomain role,
+    public Campaigns(UUID id, ProductDomain product, UserDomain user, CategoryDomain category, String zone, RolDomain role,
                       TypeOfDocumentDomain documentType, BankDomain bank, LocalDate startDate, LocalDate endDate,
                       LocalDate registrationDate, String duration) {
         this.id = id;
