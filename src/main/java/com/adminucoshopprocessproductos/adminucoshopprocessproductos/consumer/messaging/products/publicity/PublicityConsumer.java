@@ -13,7 +13,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 public class PublicityConsumer {
-/*
+
     private final PublicityService publicityService;
     private final MapperJsonObjectJackson mapper;
 
@@ -85,5 +85,5 @@ public class PublicityConsumer {
             return error;
         }
     }
-*/
+
 }
