@@ -24,10 +24,10 @@ public class ProductManagamentConsumer {
     }
 
     @RabbitListener(queues = {"apiproducts.process.save.product.qu"})
-    public String saveProduct(Object object) {
+    public String saveProduct(String object) {
 
         try {
-            Optional<ProductDomain> productDomain = mapper.execute(object, ProductDomain.class);
+            Optional<ProductDomain> productDomain = mapper.ejecutar(object, ProductDomain.class);
 
             if (productDomain.isPresent()) {
                 ProductDomain product = productDomain.get();
@@ -47,9 +47,9 @@ public class ProductManagamentConsumer {
     }
 
     @RabbitListener(queues = {"apiproducts.process.update.product.qu"})
-    public String updateProduct(Object object) {
+    public String updateProduct(String object) {
         try {
-            Optional<ProductDomain> productDomain = mapper.execute(object, ProductDomain.class);
+            Optional<ProductDomain> productDomain = mapper.ejecutar(object, ProductDomain.class);
 
             if (productDomain.isPresent()) {
                 ProductDomain product = productDomain.get();
@@ -70,9 +70,9 @@ public class ProductManagamentConsumer {
 
 
     @RabbitListener(queues = {"apiproducts.process.delete.product.qu"})
-    public String deleteProduct(Object object) {
+    public String deleteProduct(String object) {
         try {
-            Optional<ProductDomain> productDomain = mapper.execute(object, ProductDomain.class);
+            Optional<ProductDomain> productDomain = mapper.ejecutar(object, ProductDomain.class);
 
             if (productDomain.isPresent()) {
                 ProductDomain product = productDomain.get();
