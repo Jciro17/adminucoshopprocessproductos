@@ -43,8 +43,9 @@ public class NotificationDomain {
         return instance;
     }
 
-    public NotificationDomain(String title, String process, String action) {
+    public NotificationDomain(String title,UserDomain user, String process, String action) {
         this.title = title;
+        this.user = user;
         this.process = process;
         this.dateNotification = LocalDateTime.now();
         this.action = action;
